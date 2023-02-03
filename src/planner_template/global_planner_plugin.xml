@@ -1,0 +1,5 @@
+<library path="template_planner_plugin">
+	<class name="template_planner/TemplatePlanner" type="template_planner::TemplatePlanner" base_class_type="nav2_core::GlobalPlanner">
+	  <description>This is a plugin that follows a path.</description>
+	</class>
+</library>

@@ -1,0 +1,5 @@
+<library path="rrt_star_planner_plugin">
+	<class name="rrt_star_planner/RRTStarPlanner" type="rrt_star_planner::RRTStarPlanner" base_class_type="nav2_core::GlobalPlanner">
+	  <description>This is a plugin that follows a path.</description>
+	</class>
+</library>
