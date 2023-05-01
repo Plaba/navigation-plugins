@@ -1,0 +1,80 @@
+FindRaiseStatesOnPath()
+    s = sstart, raise = false, loop = false, ctr = 0;
+    while (s != sgoal AND loop = false AND ctr < maxsteps)
+        x = argmin(s′∈succ(s),(c(s, s′) + g[s′]));
+        rhs(s) = c(s, x) + g[x];
+        if (g[s] != rhs[s])
+            UpdateVertex(s);
+            raise = true;
+        if (x = s)
+            loop = true;
+        else
+            s = x;
+            ctr = ctr + 1;
+    return raise;
+
+UpdateVertex(s)
+    if (g[s] != rhs(s))
+        Insert(U, s, CalculateKey(s));
+    else if (g[s] = rhs(s)) and (s ∈ U)
+        Remove(U, s);
+
+UpdateVertexLower(s)
+    if (g[s] > rhs(s))
+        Insert(U, s, CalculateKey(s));
+    else if (g[s] = rhs(s)) and (s ∈ U)
+        Remove(U, s);
+
+CalculateKey(s):
+    return [min(g[s], rhs(s)) + h(sstart, s) + km ; min(g[s], rhs(s))];
+Initialize():
+    U = ∅; km = 0;
+    for all s ∈ S:
+        rhs(s) = g[s] = ∞;
+    rhs(sgoal) = 0;
+    Insert(U, sgoal, [h(sstart, sgoal), 0]);
+ComputeShortestPathDelayed():
+    while (U.MinKey() ̇< CalculateKey(sstart) or g[sstart] != rhs(sstart)):
+        s = U.Top();
+        kold = U.TopKey();
+        knew = CalculateKey(s);
+        if (kold < knew ):
+            Insert(U, s, knew );
+        else if (g[s] > rhs(s)):
+            g[s] = rhs(s)
+            Remove(U, s);
+            for all x ∈ P red(s):
+                rhs(x) = min(rhs(x), c(x, s) + g[s]);
+                UpdateVertexLower(x);
+        else:
+            gold = g[s];
+            gs = ∞;
+            for all x ∈ P red(s) ∪ s:
+                if (rhs(x) = c(x, s) + gold or x = s):
+                    if (x != sgoal):
+                        rhs(x) = minx′∈Succ(x) (c(x, x′ ) + g[x′]);
+                UpdateVertex(x);
+Main():
+    slast = sstart;
+    Initialize();
+    ComputeShortestPathDelayed();
+    while (sstart != sgoal):
+        sstart = argmins∈Succ(sstart )(c(sstart , s) + g[s]);
+        Move to sstart and check for changed edge costs
+        if any edge costs changed
+            km = km + h(slast , sstart );
+            slast = sstart ;
+            for all directed edges (u, v) with changed edge costs
+                cold = c(u, v);
+                Update the edge cost c(u, v);
+                if (cold > c(u, v)):
+                    rhs(u) = min(rhs(u), c(u, v) + g[v]);
+                else if (rhs(u) = cold + g[v]):
+                    if (u != sgoal)
+                        rhs(u) = min(u′∈Succ(u),(c(u, u′ ) + g[u′ ]));
+                UpdateVertexLower(u);
+            ComputeShortestPathDelayed();
+            raise = FindRaiseStatesOnPath();
+            while (raise):
+                ComputeShortestPathDelayed();
+                raise = FindRaiseStatesOnPath();

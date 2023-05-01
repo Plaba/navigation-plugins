@@ -1,0 +1,5 @@
+<library path="right_left_planner">
+	<class name="right_left_planner/RightLeftPlanner" type="right_left_planner::RightLeftPlanner" base_class_type="nav2_core::GlobalPlanner">
+	  <description></description>
+	</class>
+</library>

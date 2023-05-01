@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>right_left_planner::PlaygroundWindow</class>
+ <widget class="QWidget" name="right_left_planner::PlaygroundWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>713</width>
+    <height>541</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Right-Left Planner Playground</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinAndMaxSize</enum>
+     </property>
+     <item>
+      <widget class="QRadioButton" name="startRadioButton">
+       <property name="text">
+        <string>Start</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="goalRadioButton">
+       <property name="text">
+        <string>Goal</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="obstacleRadioButton">
+       <property name="text">
+        <string>Obstacle</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="freeRadioButton">
+       <property name="text">
+        <string>Free</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="width_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Width:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="widthSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="height_label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Height: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="heightSpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimum">
+        <number>10</number>
+       </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>50</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="stepButton">
+       <property name="text">
+        <string>Step</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="solveButton">
+       <property name="text">
+        <string>Solve!</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetButton">
+       <property name="text">
+        <string>Reset</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="right_left_planner::PlaygroundWidget" name="PlannerView">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>right_left_planner::PlaygroundWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>playground_widget.hpp</header>
+   <slots>
+    <slot>setnumcellswide(int)</slot>
+    <slot>setnumcellshigh(int)</slot>
+    <slot>setobstacle()</slot>
+    <slot>setfree()</slot>
+    <slot>setstart()</slot>
+    <slot>setgoal()</slot>
+    <slot>plan()</slot>
+    <slot>step()</slot>
+    <slot>reset()</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>heightSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setnumcellshigh(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>646</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widthSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setnumcellswide(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>523</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>obstacleRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setobstacle()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>278</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>freeRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setfree()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>386</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>goalRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setgoal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>169</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>startRadioButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>setstart()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>61</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>solveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>plan()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>634</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>stepButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>step()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>559</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>342</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>resetButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PlannerView</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>672</x>
+     <y>22</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>356</x>
+     <y>287</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

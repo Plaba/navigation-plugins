@@ -1,0 +1,5 @@
+<library path="delayed_d_star_planner">
+	<class name="delayed_d_star_planner/DelayedDStarPlanner" type="delayed_d_star_planner::DelayedDStarPlanner" base_class_type="nav2_core::GlobalPlanner">
+	  <description></description>
+	</class>
+</library>
