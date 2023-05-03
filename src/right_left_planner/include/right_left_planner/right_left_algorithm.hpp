@@ -231,7 +231,11 @@ public:
       changed_cells.clear();
       rtree.clear();
       segments.clear();
+      result = nullptr;
 
+      for (int i = 0; i < nx * ny; i++) {
+          costarr[i] = reduceToUnvisited(costarr[i]);
+      }
   }
 
   std::vector<std::shared_ptr<StoredSegment>>

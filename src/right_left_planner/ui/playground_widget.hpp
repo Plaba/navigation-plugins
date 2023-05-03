@@ -32,7 +32,7 @@ public slots:
 
   void plan();
   void step();
-  void reset();
+  void resetplanning();
 
 protected:
 
@@ -75,6 +75,7 @@ private:
 
   RightLeftAlgorithm planner;
 
+    void drawSegment(QPainter &painter, const Segment &segment, int xoffset, int yoffset, int squaresize) const;
 };
 
 

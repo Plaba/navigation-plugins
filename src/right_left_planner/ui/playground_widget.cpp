@@ -45,9 +45,9 @@ void PlaygroundWidget::paintGL() {
                     painter.setBrush(QBrush(Qt::gray));
                 }
             } else if (i == start[0] && j == start[1]) {
-                painter.setBrush(QBrush(Qt::blue));
+                painter.setBrush(QBrush(Qt::darkCyan));
             } else if (i == goal[0] && j == goal[1]) {
-                painter.setBrush(QBrush(Qt::green));
+                painter.setBrush(QBrush(Qt::darkGreen));
             } else {
                 if (highlight_unvisited && !isVisited(planner.getCell(i, j))) {
                     painter.setBrush(QBrush(Qt::yellow));
@@ -63,10 +63,7 @@ void PlaygroundWidget::paintGL() {
 
     for (auto line: planner.getSegments())
     {
-        painter.drawLine(xoffset + (line.first.first.x() + 1)/2 * squaresize,
-                         yoffset + (line.first.first.y() + 1)/2  * squaresize,
-                         xoffset + (line.first.second.x() + 1)/2 * squaresize,
-                         yoffset + (line.first.second.y() + 1)/2 * squaresize);
+        drawSegment(painter, line.first, xoffset, yoffset, squaresize);
     }
 
     if (result != nullptr) {
@@ -79,7 +76,6 @@ void PlaygroundWidget::paintGL() {
         }
     } else if (step_result != nullptr) {
         drawPathStep(painter, *step_result);
-        step_result = nullptr;
     }
 }
 
@@ -95,19 +91,24 @@ void PlaygroundWidget::drawPathStep(QPainter &painter, const PathStep &step){
         if (step.next->completed) {
             painter.setPen(QPen(Qt::green, 2));
         } else {
-            painter.setPen(QPen(Qt::blue, 2, Qt::DashLine));
+            painter.setPen(QPen(Qt::cyan, 2, Qt::DashLine));
         }
 
         auto segment = step.next->segment;
-        painter.drawLine(xoffset + segment.first.x()/2 * squaresize + squaresize / 2,
-                         yoffset + segment.first.y()/2 * squaresize + squaresize / 2,
-                         xoffset + segment.second.x()/2 * squaresize + squaresize / 2,
-                         yoffset + segment.second.y()/2 * squaresize + squaresize / 2);
+        drawSegment(painter, segment, xoffset, yoffset, squaresize);
 
         if(step.next->next != nullptr) {
             drawPathStep(painter, *step.next->next);
         }
     }
+}
+
+void
+PlaygroundWidget::drawSegment(QPainter &painter, const Segment &segment, int xoffset, int yoffset, int squaresize) const {
+    painter.drawLine(xoffset + ((float) segment.first.x())/ 2 * squaresize + squaresize / 2,
+                     yoffset + ((float) segment.first.y())/2 * squaresize + squaresize / 2,
+                     xoffset + ((float) segment.second.x())/2 * squaresize + squaresize / 2,
+                     yoffset + ((float) segment.second.y())/2 * squaresize + squaresize / 2);
 }
 
 void PlaygroundWidget::setnumcellswide(int cellwidth) {
@@ -150,11 +151,9 @@ void PlaygroundWidget::plan() {
 }
 
 void PlaygroundWidget::step() {
-    planner.setStart(start);
-    planner.setGoal(goal);
-
-
     if (!setup) {
+        planner.setStart(start);
+        planner.setGoal(goal);
         planner.prepare();
         setup = true;
         highlight_unvisited = true;
@@ -199,12 +198,12 @@ void PlaygroundWidget::mouseMoveEvent(QMouseEvent * event) {
     }
 }
 
-void PlaygroundWidget::reset() {
-    planner.reset();
+void PlaygroundWidget::resetplanning() {
     result = nullptr;
     step_result = nullptr;
     setup = false;
     highlight_unvisited = false;
+    planner.reset();
     update();
 }
 

@@ -56,6 +56,12 @@ typedef std::shared_ptr<StoredSegment> StoredSegmentPtr;
 
 typedef boost::geometry::index::rtree<StoredSegment, boost::geometry::index::rstar<16, 4>> RTree;
 
+inline Point getSide(const Segment& segment, bool is_ccw) {
+    if(is_ccw)
+        return segment.second;
+    return segment.first;
+}
+
 inline Point getSide(const StoredSegmentPtr& segment, bool is_ccw) {
     if(is_ccw)
         return segment->first.second;

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/right_left_planner/path_segment.hpp"
+#include "../include/right_left_planner/right_left_algorithm.hpp"
 
 namespace right_left_planner {
 
@@ -76,7 +77,49 @@ TEST(PathSegmentTest, wrapPolygon) {
     ASSERT_DOUBLE_EQ(testSegment.getLength(), 4.0);
     ASSERT_DOUBLE_EQ(testSegment.getCost(), 4.0);
 
-    auto result = testSegment.wrapPolygon(s1, std::numeric_limits<double>::max(), nullptr);
+    auto result = testSegment.wrapPolygon(s1, false, nullptr);
+
+    ASSERT_EQ(result.next->segment.first.x(),0);
+    ASSERT_EQ(result.next->segment.first.y(),0);
+
+    ASSERT_EQ(result.next->segment.second.x(),1);
+    ASSERT_EQ(result.next->segment.second.y(),1);
+
+    result = *result.next->next;
+
+    ASSERT_EQ(result.next->segment.first.x(),1);
+    ASSERT_EQ(result.next->segment.first.y(),1);
+
+    ASSERT_EQ(result.next->segment.second.x(),3);
+    ASSERT_EQ(result.next->segment.second.y(),1);
+
+    result = *result.next->next;
+
+    ASSERT_EQ(result.next->segment.first.x(),3);
+    ASSERT_EQ(result.next->segment.first.y(),1);
+
+    ASSERT_EQ(result.next->segment.second.x(),4);
+    ASSERT_EQ(result.next->segment.second.y(),0);
+
+    ASSERT_EQ(result.next->next, nullptr);
+}
+
+TEST(PathSegmentTest, fullTest){
+    auto rla = RightLeftAlgorithm(5,5);
+
+    int start[2] = {1,0};
+    int goal[2] = {1,5};
+
+    rla.setObstacle(0,2);
+    rla.setObstacle(1,2);
+    rla.setObstacle(2,2);
+    rla.setGoal(goal);
+    rla.setStart(start);
+
+    rla.prepare();
+    auto step = rla.calculateStep();
+
+    ASSERT_EQ(step->next, nullptr);
 }
 
 } // namespace right_left_planner

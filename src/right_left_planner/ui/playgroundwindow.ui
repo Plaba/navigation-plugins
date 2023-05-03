@@ -176,7 +176,7 @@
     <slot>setgoal()</slot>
     <slot>plan()</slot>
     <slot>step()</slot>
-    <slot>reset()</slot>
+    <slot>resetplanning()</slot>
    </slots>
   </customwidget>
  </customwidgets>
@@ -314,7 +314,7 @@
    <sender>resetButton</sender>
    <signal>clicked()</signal>
    <receiver>PlannerView</receiver>
-   <slot>close()</slot>
+   <slot>resetplanning()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>672</x>

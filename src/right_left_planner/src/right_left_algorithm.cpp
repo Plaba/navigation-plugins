@@ -241,7 +241,7 @@ void RightLeftAlgorithm::setCostmap(const COSTTYPE *cmap, bool isROS,
 }
 
 RectilinearPolygonSmoother::RectilinearPolygonSmoother(int startx, int starty, Direction start_direction)
-        : x(2 * startx + 1), y(2 * starty + 1), started(false), dir(start_direction) {}
+        : x(2 * startx - 1), y(2 * starty + 1), started(false), dir(start_direction) {}
 
 // TODO add elbow smoothing
 void RectilinearPolygonSmoother::visit(StepDirection step) {
@@ -250,19 +250,14 @@ void RectilinearPolygonSmoother::visit(StepDirection step) {
             started = true;
             first_x = x;
             first_y = y;
-
-            std::cout << "smoother: first point: " << first_x << ", " << first_y << std::endl;
         } else {
-            segments.push_back(Segment(Point(base_x, base_y), Point(x, y)));
+            segments.push_back(Segment(Point(x, y), Point(base_x, base_y)));
             if (x == first_x && y == first_y) {
                 isdone = true;
             }
         }
-
         base_x = x;
         base_y = y;
-        std::cout << "smoother: base_x: " << base_x << ", " << base_y << std::endl;
-
     }
 
     switch (step) {
@@ -306,8 +301,6 @@ bool RectilinearPolygonSmoother::isDone() {
 std::vector<std::shared_ptr<StoredSegment>> RightLeftAlgorithm::visitPolygon(uint index, Direction direction) {
     uint x = index % nx;
     uint y = index / nx;
-
-    std::cout << "visitPolygon: " << x << ", " << y << std::endl;
 
     std::vector<std::shared_ptr<StoredSegment>> polygon_segments;
     RectilinearPolygonSmoother smoother(x, y, direction);
@@ -356,11 +349,8 @@ std::vector<std::shared_ptr<StoredSegment>> RightLeftAlgorithm::visitPolygon(uin
             new_index = index;
             step = StepDirection::RIGHT;
         }
-
         smoother.visit(step);
-
         index = new_index;
-
     } while (!smoother.isDone());
 
     auto smoother_segments = smoother.getSegments();
@@ -374,21 +364,17 @@ std::vector<std::shared_ptr<StoredSegment>> RightLeftAlgorithm::visitPolygon(uin
         SegmentMetadata metadata = base_metadata;
         auto new_segment = std::make_shared<StoredSegment>();
         if (polygon_segments.size() > 0) {
-            metadata.clockwise_segment = polygon_segments.back();
-            polygon_segments.back()->second.counterclockwise_segment = new_segment;
+            metadata.counterclockwise_segment = polygon_segments.back();
+            polygon_segments.back()->second.clockwise_segment = new_segment;
         }
         new_segment->first = segment;
         new_segment->second = metadata;
         polygon_segments.push_back(new_segment);
     }
 
-    std::cout << "finished: polygon_segments.size(): " << polygon_segments.size() << std::endl;
+    polygon_segments.back()->second.clockwise_segment = polygon_segments[0];
 
-    std::cout << std::endl;
-
-    polygon_segments.back()->second.counterclockwise_segment = polygon_segments[0];
-
-    polygon_segments[0]->second.clockwise_segment = polygon_segments.back();
+    polygon_segments[0]->second.counterclockwise_segment = polygon_segments.back();
 
     return polygon_segments;
 }
@@ -421,7 +407,7 @@ std::vector<StoredSegment> RightLeftAlgorithm::getCurrentCostmapLines() {
             int neighbor_ys[4] = {y, y, y - 1, y + 1};
 
 
-            Direction directions[4] = {Direction::UP, Direction::DOWN, Direction::RIGHT, Direction::LEFT};
+            Direction directions[4] = {Direction::UP, Direction::DOWN, Direction::LEFT, Direction::RIGHT};
 
             for (int i = 0; i < 4; i++) {
 

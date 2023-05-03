@@ -83,20 +83,28 @@ struct PathChoice {
   }
 
   const inline PathStep &getStep(bool from_left) const {
-    if (from_left) {
-        return clockwise_choice;
-    } else {
-        return counter_clockwise_choice;
-    }
-  }
-
-  inline PathStep &minStep() {
-      if (clockwise_choice.cost < counter_clockwise_choice.cost) {
+      if (from_left) {
           return clockwise_choice;
       } else {
           return counter_clockwise_choice;
       }
   }
+
+    inline PathStep &minStep() {
+        if (clockwise_choice.cost < counter_clockwise_choice.cost) {
+            return clockwise_choice;
+        } else {
+            return counter_clockwise_choice;
+        }
+    }
+
+    inline PathStep &maxStep() {
+        if (clockwise_choice.cost < counter_clockwise_choice.cost) {
+            return clockwise_choice;
+        } else {
+            return counter_clockwise_choice;
+        }
+    }
 };
 } // namespace right_left_planner
 
